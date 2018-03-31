@@ -1,0 +1,107 @@
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+
+class CreateNewRecord extends Component {
+ constructor(props) {
+   super(props);
+ }
+
+ render() {
+   return (
+     <div>
+       Date:
+       <div></div>
+       Title:
+       <input type="text"></input>
+       <textarea />
+       <input type="button">Save</input>
+       <input type="button">Cancel</input>
+     </div>
+   )
+ }
+}
+
+
+class SelectYear extends Component {
+ constructor(props) {
+   super(props);
+   this.changeYear = this.changeYear.bind(this);
+ }
+ changeYear(e) {
+   const newYear = e.target.value;
+   this.props.onChange(newYear);
+ }
+
+ render() {
+   return (
+   <div>
+       <select onChange={this.changeYear}>
+         <option value="2016">2016</option>
+         <option value="2017">2017</option>
+         <option value="2018" selected="selected">2018</option>
+       </select>
+     </div>
+   );
+ }
+}
+
+
+class Days extends Component {
+  constructor(props) {
+   super(props);
+   this.state = {
+     year: (new Date()).getFullYear(),
+     days: [],
+     month: (new Date()).getMonth() + 1,
+     day: (new Date()).getDate()
+   }
+   this.getDays = this.getDays.bind(this);
+   this.changeYear = this.changeYear.bind(this);
+   this.pickDay = this.pickDay.bind(this);
+}
+
+
+ getDays(e) {
+   const days = e.target.id;
+   const daysArray = [];
+    this.setState({month: e.target.className});
+
+   for (let i = 1; i <= days; i++) {
+     daysArray.push(i)
+   };
+
+   this.state.days = daysArray;
+ }
+
+ pickDay(e) {
+   this.setState({day: e.target.id})
+
+ }
+
+ changeYear(newYear) {
+   this.setState({year: newYear});
+ }
+
+
+ render() {
+   return (
+     <div id="calendar">
+     <SelectYear year={this.state.year} onChange={this.changeYear}/>
+     <div id="months">
+       <p className="1" id="31" onClick={this.getDays}>Jan</p>
+       <p className="2" id="28" onClick={this.getDays}>Feb</p>
+       <p className="3" id="31" onClick={this.getDays}>Mar</p>
+       <p className="4" id="30" onClick={this.getDays}>Apr</p>
+     </div>
+     <div id="days">
+     {this.state.days.map(day => <span id={day} onClick={this.pickDay}>{day} </span>)}
+     </div>
+     <h4 id="demo2"> {this.state.year} </h4> 
+     <h4 id="demo3"> {this.state.month} </h4> 
+     <h3 id="demo4"> {this.state.day} </h3> 
+   </div> 
+   )
+ }
+}
+
+render(<Days />, document.getElementById('demo3'));
